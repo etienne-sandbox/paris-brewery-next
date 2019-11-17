@@ -1,21 +1,23 @@
 import React from "react";
 import Head from "next/head";
-import axios from "axios";
-import Link from "next/link";
-import { slugify } from "../utils/slugify";
+import Layout from "../components/Layout";
+import Card from "../components/Card";
 
 const About = ({}) => {
   return (
-    <div>
+    <Layout isAbout={true}>
       <Head>
         <title>Home</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div>
-        <p>Bla bla bla bla</p>
-      </div>
-    </div>
+      <Card title="A propos">
+        <p>
+          Site créer par{" "}
+          <a href="https://twitter.com/Etienne_dot_js">@Etienne_dot_js</a>
+        </p>
+      </Card>
+    </Layout>
   );
 };
 

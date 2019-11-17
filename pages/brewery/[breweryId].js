@@ -4,40 +4,74 @@ import axios from "axios";
 import Error from "next/error";
 import Link from "next/link";
 import { extractId } from "../../utils/extractId";
+import Layout from "../../components/Layout";
+import Card from "../../components/Card";
 
 const Brewery = ({ brewery }) => {
   if (!brewery) {
-    return <Error statusCode={404} />;
+    return (
+      <Layout>
+        <Card>
+          <p>404 - Page introuvable</p>
+        </Card>
+      </Layout>
+    );
   }
 
   return (
-    <div>
+    <Layout>
       <Head>
         <title>Home</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div>
-        <h1>{brewery.name}</h1>
-        <a href={brewery.website}>Site web</a>
+      <Card title={brewery.name}>
+        <p className="infos">
+          <a href={brewery.website} target="_blank">
+            Site web de {brewery.name}
+          </a>
+        </p>
         <div>
           {brewery.description.map((content, index) => (
             <p key={index}>{content}</p>
           ))}
         </div>
-        <ul>
-          {brewery.beers.map(beer => {
-            return (
-              <li key={beer.id}>
-                <Link href="/beer/[beerId]" as={`/beer/${beer.id}`}>
-                  <a>{beer.name}</a>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </div>
+      </Card>
+
+      <Card subTitle="Liste des bières">
+        {brewery.beers.map(beer => {
+          return (
+            <Link key={beer.id} href="/beer/[beerId]" as={`/beer/${beer.id}`}>
+              <a className="item">{beer.name}</a>
+            </Link>
+          );
+        })}
+      </Card>
+
+      <style jsx>{`
+        .infos {
+          text-align: center;
+          font-size: 1.2rem;
+          margin-top: 30px;
+          margin-bottom: 30px;
+        }
+        .item {
+          display: block;
+          font-size: 1.2rem;
+          padding: 8px;
+          color: inherit;
+          text-decoration: none;
+          transition-duration: 0.1s;
+        }
+        .item:nth-child(even) {
+          background: #e8f5e9;
+        }
+        .item:hover {
+          padding-left: 20px;
+          background: #c8e6c9;
+        }
+      `}</style>
+    </Layout>
   );
 };
 

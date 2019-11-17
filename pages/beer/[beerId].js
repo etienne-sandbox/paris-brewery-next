@@ -5,36 +5,65 @@ import Error from "next/error";
 import Link from "next/link";
 import { extractId } from "../../utils/extractId";
 import { slugify } from "../../utils/slugify";
+import Layout from "../../components/Layout";
+import Card from "../../components/Card";
 
 const Beer = ({ beer }) => {
   if (!beer) {
-    return <Error statusCode={404} />;
+    return (
+      <Layout>
+        <Card>
+          <p>404 - Page introuvable</p>
+        </Card>
+      </Layout>
+    );
   }
 
   return (
-    <div>
+    <Layout>
       <Head>
         <title>Home</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div>
-        <h1>{beer.name}</h1>
-        <a href={beer.url}>Détails</a>
-        <p>
-          Brassée par:{" "}
-          <Link
-            href="/brewery/[breweryId]"
-            as={`/brewery/${slugify(beer.brewery.name)}-${beer.brewery.id}`}
-          >
-            <a>{beer.brewery.name}</a>
-          </Link>
+      <Card title={beer.name + (beer.alcool ? ` - ${beer.alcool}%` : "")}>
+        <p className="infos">
+          <span>
+            Brassée par:{" "}
+            <Link
+              href="/brewery/[breweryId]"
+              as={`/brewery/${slugify(beer.brewery.name)}-${beer.brewery.id}`}
+            >
+              <a>{beer.brewery.name}</a>
+            </Link>
+          </span>
+          {beer.alcool && (
+            <React.Fragment>
+              {" - "}
+              <span>
+                <strong>Alcool</strong>: {beer.alcool}%
+              </span>
+            </React.Fragment>
+          )}
+          {" - "}
+          <a href={beer.url} target="_blank">
+            Détails
+          </a>
         </p>
         {beer.description.map((content, index) => (
           <p key={index}>{content}</p>
         ))}
-      </div>
-    </div>
+      </Card>
+
+      <style jsx>{`
+        .infos {
+          text-align: center;
+          font-size: 1.2rem;
+          margin-top: 30px;
+          margin-bottom: 30px;
+        }
+      `}</style>
+    </Layout>
   );
 };
 
