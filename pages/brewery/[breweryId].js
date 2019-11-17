@@ -6,6 +6,7 @@ import Link from "next/link";
 import { extractId } from "../../utils/extractId";
 import Layout from "../../components/Layout";
 import Card from "../../components/Card";
+import { slugify } from "../../utils/slugify";
 
 const Brewery = ({ brewery }) => {
   if (!brewery) {
@@ -41,7 +42,11 @@ const Brewery = ({ brewery }) => {
       <Card subTitle="Liste des bières">
         {brewery.beers.map(beer => {
           return (
-            <Link key={beer.id} href="/beer/[beerId]" as={`/beer/${beer.id}`}>
+            <Link
+              key={beer.id}
+              href="/beer/[beerId]"
+              as={`/beer/${slugify(beer.name)}-${beer.id}`}
+            >
               <a className="item">{beer.name}</a>
             </Link>
           );
