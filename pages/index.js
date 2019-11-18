@@ -10,7 +10,7 @@ const Home = ({ breweries }) => {
   return (
     <Layout>
       <Head>
-        <title>Home</title>
+        <title>Paris Microbrasseries</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

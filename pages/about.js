@@ -7,11 +7,11 @@ const About = ({}) => {
   return (
     <Layout isAbout={true}>
       <Head>
-        <title>Home</title>
+        <title>À propos - Paris Microbrasseries</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Card title="A propos">
+      <Card title="À propos">
         <p>
           Site créer par{" "}
           <a href="https://twitter.com/Etienne_dot_js">@Etienne_dot_js</a>

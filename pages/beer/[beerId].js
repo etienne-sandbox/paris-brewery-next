@@ -22,7 +22,9 @@ const Beer = ({ beer }) => {
   return (
     <Layout>
       <Head>
-        <title>Home</title>
+        <title>
+          {beer.name} par {beer.brewery.name} - Paris Microbrasseries
+        </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

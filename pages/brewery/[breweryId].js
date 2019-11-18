@@ -22,7 +22,7 @@ const Brewery = ({ brewery }) => {
   return (
     <Layout>
       <Head>
-        <title>Home</title>
+        <title>{brewery.name} - Paris Microbrasseries</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
