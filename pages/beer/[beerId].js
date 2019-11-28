@@ -1,7 +1,6 @@
 import React from "react";
 import Head from "next/head";
 import axios from "axios";
-import Error from "next/error";
 import Link from "next/link";
 import { extractId } from "../../utils/extractId";
 import { slugify } from "../../utils/slugify";
@@ -81,7 +80,7 @@ Beer.getInitialProps = async ({ query, res }) => {
     );
     return { beerId, beer: res.data };
   } catch (error) {
-    if (res && error.status === 404) {
+    if (res && error.response && error.response.status === 404) {
       res.statusCode = 404;
     }
     return { beerId };

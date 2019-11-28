@@ -1,7 +1,6 @@
 import React from "react";
 import Head from "next/head";
 import axios from "axios";
-import Error from "next/error";
 import Link from "next/link";
 import { extractId } from "../../utils/extractId";
 import Layout from "../../components/Layout";
@@ -12,8 +11,13 @@ const Brewery = ({ brewery }) => {
   if (!brewery) {
     return (
       <Layout>
-        <Card>
-          <p>404 - Page introuvable</p>
+        <Head>
+          <title>404 - Paris Microbrasseries</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+
+        <Card title="404 - Page introuvable">
+          <p>Brasserie non trouvée</p>
         </Card>
       </Layout>
     );
@@ -87,12 +91,12 @@ Brewery.getInitialProps = async ({ query, res }) => {
   }
   const breweryId = extractId(brewerySlugAndId);
   try {
-    const res = await axios.get(
+    const breweryResponse = await axios.get(
       `https://paris-brewery-api.herokuapp.com/brewery/${breweryId}`
     );
-    return { breweryId, brewery: res.data };
+    return { breweryId, brewery: breweryResponse.data };
   } catch (error) {
-    if (res && error.status === 404) {
+    if (res && error.response && error.response.status === 404) {
       res.statusCode = 404;
     }
     return { breweryId };
