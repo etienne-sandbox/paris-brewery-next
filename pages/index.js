@@ -7,6 +7,7 @@ import Layout from "../components/Layout";
 import Card from "../components/Card";
 
 const Home = ({ breweries }) => {
+  console.log(breweries);
   return (
     <Layout>
       <Head>
@@ -15,7 +16,7 @@ const Home = ({ breweries }) => {
       </Head>
 
       <Card title="Liste des microbrasseries">
-        {breweries.map(brewery => {
+        {breweries.map((brewery) => {
           return (
             <Link
               key={brewery.id}
@@ -49,11 +50,15 @@ const Home = ({ breweries }) => {
   );
 };
 
-Home.getInitialProps = async () => {
+export async function getServerSideProps(context) {
   const res = await axios.get(
     "https://paris-brewery-api.herokuapp.com/brewery"
   );
-  return { breweries: res.data };
-};
+  return {
+    props: {
+      breweries: res.data,
+    },
+  };
+}
 
 export default Home;

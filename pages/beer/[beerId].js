@@ -68,23 +68,25 @@ const Beer = ({ beer }) => {
   );
 };
 
-Beer.getInitialProps = async ({ query, res }) => {
-  const beerSlugAndId = query.beerId;
+export async function getServerSideProps({ params }) {
+  const beerSlugAndId = params.beerId;
   if (!beerSlugAndId) {
-    return {};
+    return { notFound: true };
   }
   const beerId = extractId(beerSlugAndId);
   try {
     const res = await axios.get(
       `https://paris-brewery-api.herokuapp.com/beer/${beerId}`
     );
-    return { beerId, beer: res.data };
+    return {
+      props: { beerId, beer: res.data },
+    };
   } catch (error) {
-    if (res && error.response && error.response.status === 404) {
-      res.statusCode = 404;
+    if (error.response && error.response.status === 404) {
+      return { notFound: true };
     }
-    return { beerId };
+    throw error;
   }
-};
+}
 
 export default Beer;

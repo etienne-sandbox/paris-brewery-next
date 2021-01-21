@@ -44,7 +44,7 @@ const Brewery = ({ brewery }) => {
       </Card>
 
       <Card subTitle="Liste des bières">
-        {brewery.beers.map(beer => {
+        {brewery.beers.map((beer) => {
           return (
             <Link
               key={beer.id}
@@ -84,8 +84,8 @@ const Brewery = ({ brewery }) => {
   );
 };
 
-Brewery.getInitialProps = async ({ query, res }) => {
-  const brewerySlugAndId = query.breweryId;
+export async function getServerSideProps({ params }) {
+  const brewerySlugAndId = params.breweryId;
   if (!brewerySlugAndId) {
     return {};
   }
@@ -94,13 +94,15 @@ Brewery.getInitialProps = async ({ query, res }) => {
     const breweryResponse = await axios.get(
       `https://paris-brewery-api.herokuapp.com/brewery/${breweryId}`
     );
-    return { breweryId, brewery: breweryResponse.data };
+    return {
+      props: { breweryId, brewery: breweryResponse.data },
+    };
   } catch (error) {
-    if (res && error.response && error.response.status === 404) {
-      res.statusCode = 404;
+    if (error.response && error.response.status === 404) {
+      return { notFound: true };
     }
-    return { breweryId };
+    throw error;
   }
-};
+}
 
 export default Brewery;

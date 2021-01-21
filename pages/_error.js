@@ -6,6 +6,7 @@ function Error({ statusCode }) {
   return (
     <Layout>
       <Card>
+        <h2>Oops !</h2>
         <p>
           {statusCode
             ? `An error ${statusCode} occurred on server`
