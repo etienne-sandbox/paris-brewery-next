@@ -7,7 +7,6 @@ import Layout from "../components/Layout";
 import Card from "../components/Card";
 
 const Home = ({ breweries }) => {
-  console.log(breweries);
   return (
     <Layout>
       <Head>
