@@ -1,17 +1,10 @@
 import React from "react";
-import Head from "next/head";
 import Beer from "./Beer";
 import Link from "next/link";
 
 const Layout = ({ children, isAbout = false }) => {
   return (
     <div className="content">
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,600,700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
       <header>
         <Link href="/">
           <a className="home-link">

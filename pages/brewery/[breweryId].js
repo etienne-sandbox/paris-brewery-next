@@ -7,27 +7,32 @@ import Layout from "../../components/Layout";
 import Card from "../../components/Card";
 import { slugify } from "../../utils/slugify";
 
-const Brewery = ({ brewery }) => {
-  if (!brewery) {
-    return (
-      <Layout>
-        <Head>
-          <title>404 - Paris Microbrasseries</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        <Card title="404 - Page introuvable">
-          <p>Brasserie non trouvée</p>
-        </Card>
-      </Layout>
-    );
+export async function getServerSideProps({ params }) {
+  const brewerySlugAndId = params.breweryId;
+  if (!brewerySlugAndId) {
+    return { notFound: true };
   }
+  const breweryId = extractId(brewerySlugAndId);
+  try {
+    const breweryResponse = await axios.get(
+      `https://paris-brewery-api.herokuapp.com/brewery/${breweryId}`
+    );
+    return {
+      props: { breweryId, brewery: breweryResponse.data },
+    };
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      return { notFound: true };
+    }
+    throw error;
+  }
+}
 
+export default function Brewery({ brewery }) {
   return (
     <Layout>
       <Head>
-        <title>{brewery.name} - Paris Microbrasseries</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>{`${brewery.name} - Paris Microbrasseries`}</title>
       </Head>
 
       <Card title={brewery.name}>
@@ -82,27 +87,4 @@ const Brewery = ({ brewery }) => {
       `}</style>
     </Layout>
   );
-};
-
-export async function getServerSideProps({ params }) {
-  const brewerySlugAndId = params.breweryId;
-  if (!brewerySlugAndId) {
-    return {};
-  }
-  const breweryId = extractId(brewerySlugAndId);
-  try {
-    const breweryResponse = await axios.get(
-      `https://paris-brewery-api.herokuapp.com/brewery/${breweryId}`
-    );
-    return {
-      props: { breweryId, brewery: breweryResponse.data },
-    };
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
-      return { notFound: true };
-    }
-    throw error;
-  }
 }
-
-export default Brewery;

@@ -6,12 +6,22 @@ import { slugify } from "../utils/slugify";
 import Layout from "../components/Layout";
 import Card from "../components/Card";
 
-const Home = ({ breweries }) => {
+export async function getServerSideProps(context) {
+  const res = await axios.get(
+    "https://paris-brewery-api.herokuapp.com/brewery"
+  );
+  return {
+    props: {
+      breweries: res.data,
+    },
+  };
+}
+
+export default function Home({ breweries }) {
   return (
     <Layout>
       <Head>
         <title>Paris Microbrasseries</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Card title="Liste des microbrasseries">
@@ -47,17 +57,4 @@ const Home = ({ breweries }) => {
       `}</style>
     </Layout>
   );
-};
-
-export async function getServerSideProps(context) {
-  const res = await axios.get(
-    "https://paris-brewery-api.herokuapp.com/brewery"
-  );
-  return {
-    props: {
-      breweries: res.data,
-    },
-  };
 }
-
-export default Home;

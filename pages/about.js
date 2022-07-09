@@ -3,12 +3,11 @@ import Head from "next/head";
 import Layout from "../components/Layout";
 import Card from "../components/Card";
 
-const About = ({}) => {
+export default function About() {
   return (
     <Layout isAbout={true}>
       <Head>
         <title>À propos - Paris Microbrasseries</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Card title="À propos">
@@ -19,6 +18,4 @@ const About = ({}) => {
       </Card>
     </Layout>
   );
-};
-
-export default About;
+}

@@ -7,23 +7,32 @@ import { slugify } from "../../utils/slugify";
 import Layout from "../../components/Layout";
 import Card from "../../components/Card";
 
-const Beer = ({ beer }) => {
-  if (!beer) {
-    return (
-      <Layout>
-        <Card>
-          <p>404 - Page introuvable</p>
-        </Card>
-      </Layout>
-    );
+export async function getServerSideProps({ params }) {
+  const beerSlugAndId = params.beerId;
+  if (!beerSlugAndId) {
+    return { notFound: true };
   }
+  const beerId = extractId(beerSlugAndId);
+  try {
+    const res = await axios.get(
+      `https://paris-brewery-api.herokuapp.com/beer/${beerId}`
+    );
+    return {
+      props: { beerId, beer: res.data },
+    };
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      return { notFound: true };
+    }
+    throw error;
+  }
+}
 
+export default function Beer({ beer }) {
   return (
     <Layout>
       <Head>
-        <title>
-          {beer.name} par {beer.brewery.name} - Paris Microbrasseries
-        </title>
+        <title>{`${beer.name} par ${beer.brewery.name} - Paris Microbrasseries`}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -66,27 +75,4 @@ const Beer = ({ beer }) => {
       `}</style>
     </Layout>
   );
-};
-
-export async function getServerSideProps({ params }) {
-  const beerSlugAndId = params.beerId;
-  if (!beerSlugAndId) {
-    return { notFound: true };
-  }
-  const beerId = extractId(beerSlugAndId);
-  try {
-    const res = await axios.get(
-      `https://paris-brewery-api.herokuapp.com/beer/${beerId}`
-    );
-    return {
-      props: { beerId, beer: res.data },
-    };
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
-      return { notFound: true };
-    }
-    throw error;
-  }
 }
-
-export default Beer;
